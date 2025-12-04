@@ -23,26 +23,30 @@ const logout = () => {
 };
 
 const apiCall = async (url, options = {}) => {
+    // allow callers to opt out of automatic logout-on-401 by passing
+    // { skipAuthRedirect: true } in options
+    const { skipAuthRedirect, headers: optHeaders, ...restOptions } = options;
+
     const token = getToken();
     const headers = {
         'Content-Type': 'application/json',
-        ...options.headers
+        ...optHeaders
     };
-    
+
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
     try {
         const response = await fetch(`${API_BASE_URL}${url}`, {
-            ...options,
+            ...restOptions,
             headers
         });
 
         const data = await response.json();
-        
+
         if (!response.ok) {
-            if (response.status === 401) {
+            if (response.status === 401 && !skipAuthRedirect) {
                 logout();
             }
             throw new Error(data.error || 'Something went wrong');

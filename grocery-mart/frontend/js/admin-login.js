@@ -8,7 +8,8 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
     try {
         const data = await apiCall('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
+            skipAuthRedirect: true
         });
         
         if (data.user.role !== 'admin') {
@@ -24,8 +25,12 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
         setTimeout(() => {
             window.location.href = 'admin.html';
         }, 1000);
+});
     } catch (error) {
-        messageDiv.innerHTML = `<div class="message message-error">${error.message}</div>`;
+        const msg = (error && error.message && error.message.toLowerCase().includes('invalid credentials'))
+            ? 'Invalid username/pass'
+            : (error.message || 'Something went wrong');
+        messageDiv.innerHTML = `<div class="message message-error">${msg}</div>`;
     }
 });
 
