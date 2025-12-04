@@ -1,0 +1,48 @@
+---
+- name: Add Jenkins repository key
+  apt_key:
+    url: https://pkg.jenkins.io/debian/jenkins.io-2023.key
+    state: present
+
+- name: Add Jenkins repository
+  apt_repository:
+    repo: "deb https://pkg.jenkins.io/debian binary/"
+    state: present
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+    update_cache: yes
+
+- name: Start and enable Jenkins service
+  systemd:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: Add jenkins user to docker group
+  user:
+    name: jenkins
+    groups: docker
+    append: yes
+
+- name: Wait for Jenkins to be ready
+  uri:
+    url: http://localhost:8080
+    status_code: 200
+  register: jenkins_ready
+  until: jenkins_ready.status == 200
+  retries: 30
+  delay: 10
+  ignore_errors: yes
+
+- name: Display Jenkins initial admin password
+  debug:
+    msg: "Jenkins initial admin password: {{ lookup('file', '/var/lib/jenkins/secrets/initialAdminPassword') }}"
+  when: jenkins_ready.status == 200
+
+- name: Display Jenkins URL
+  debug:
+    msg: "Jenkins is available at http://{{ ansible_host }}:8080"
+

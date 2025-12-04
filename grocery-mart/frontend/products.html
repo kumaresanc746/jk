@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - GroceryMart</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">🛒 GroceryMart</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li id="userNav" class="hidden">
+                    <a href="profile.html">Profile</a>
+                </li>
+                <li id="authNav">
+                    <a href="login.html">Login</a>
+                </li>
+                <li id="cartNav" class="cart-icon hidden">
+                    <a href="cart.html">🛒 <span class="cart-count" id="cartCount">0</span></a>
+                </li>
+                <li id="logoutNav" class="hidden">
+                    <a href="#" onclick="logout()">Logout</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2 class="text-center mb-3">All Products</h2>
+        
+        <div class="form-group" style="max-width: 500px; margin: 0 auto 2rem;">
+            <input type="text" id="searchInput" placeholder="Search products..." onkeyup="handleSearch()">
+        </div>
+
+        <div class="categories mb-3">
+            <a href="products.html" class="category-card" id="allCat">
+                <div class="category-icon">📦</div>
+                <div>All</div>
+            </a>
+            <a href="products.html?category=Fruits" class="category-card">
+                <div class="category-icon">🍎</div>
+                <div>Fruits</div>
+            </a>
+            <a href="products.html?category=Vegetables" class="category-card">
+                <div class="category-icon">🥬</div>
+                <div>Vegetables</div>
+            </a>
+            <a href="products.html?category=Dairy" class="category-card">
+                <div class="category-icon">🥛</div>
+                <div>Dairy</div>
+            </a>
+            <a href="products.html?category=Snacks" class="category-card">
+                <div class="category-icon">🍪</div>
+                <div>Snacks</div>
+            </a>
+            <a href="products.html?category=Beverages" class="category-card">
+                <div class="category-icon">🥤</div>
+                <div>Beverages</div>
+            </a>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <div class="loading">Loading products...</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 GroceryMart. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success - GroceryMart</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">🛒 GroceryMart</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="profile.html">My Orders</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-container text-center">
+            <h1 style="color: var(--success-color); font-size: 4rem;">✓</h1>
+            <h2>Order Placed Successfully!</h2>
+            <p>Your order has been confirmed and will be delivered soon.</p>
+            <p id="orderId"></p>
+            <div style="margin-top: 2rem;">
+                <a href="profile.html" class="btn btn-primary">View Orders</a>
+                <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 GroceryMart. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        if (orderId) {
+            document.getElementById('orderId').textContent = `Order ID: ${orderId}`;
+        }
+    </script>
+</body>
+</html>
+

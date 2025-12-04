@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_REGISTRY = 'your-registry.com'
+        IMAGE_NAME = 'grocery-mart'
+        KUBECONFIG = credentials('kubeconfig')
+    }
+
+    stages {
+        stage('Git Pull') {
+            steps {
+                echo 'Pulling latest code from repository...'
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing backend dependencies...'
+                sh 'cd backend && npm install'
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                echo 'Building frontend...'
+                sh 'echo "Frontend build complete"'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker images...'
+                sh '''
+                    docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}-frontend:${BUILD_NUMBER} -f Dockerfile.frontend .
+                    docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}-backend:${BUILD_NUMBER} -f Dockerfile.backend .
+                '''
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                echo 'Pushing Docker images to registry...'
+                withCredentials([usernamePassword(credentialsId: 'docker-registry-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login ${DOCKER_REGISTRY} -u $DOCKER_USER --password-stdin
+                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}-frontend:${BUILD_NUMBER}
+                        docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}-backend:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo 'Deploying to Kubernetes...'
+                sh '''
+                    kubectl set image deployment/frontend-deployment frontend=${DOCKER_REGISTRY}/${IMAGE_NAME}-frontend:${BUILD_NUMBER} -n grocery-mart
+                    kubectl set image deployment/backend-deployment backend=${DOCKER_REGISTRY}/${IMAGE_NAME}-backend:${BUILD_NUMBER} -n grocery-mart
+                    kubectl rollout status deployment/frontend-deployment -n grocery-mart
+                    kubectl rollout status deployment/backend-deployment -n grocery-mart
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
+

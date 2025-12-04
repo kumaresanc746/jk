@@ -1,0 +1,43 @@
+---
+- name: Configure GroceryMart Servers
+  hosts: servers
+  become: yes
+  vars:
+    docker_version: "latest"
+    jenkins_user: "jenkins"
+    
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - wget
+          - git
+          - python3-pip
+          - unzip
+          - apt-transport-https
+          - ca-certificates
+          - gnupg
+          - lsb-release
+        state: present
+
+    - name: Install Docker
+      include_tasks: tasks/docker.yml
+
+    - name: Install Docker Compose
+      include_tasks: tasks/docker-compose.yml
+
+    - name: Install Jenkins
+      include_tasks: tasks/jenkins.yml
+
+    - name: Install kubectl
+      include_tasks: tasks/kubectl.yml
+
+    - name: Deploy Application
+      include_tasks: tasks/deploy.yml
+

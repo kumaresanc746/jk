@@ -1,0 +1,12 @@
+---
+- name: Check if Docker Compose is installed
+  command: docker compose version
+  register: docker_compose_check
+  failed_when: false
+  changed_when: false
+
+- name: Install Docker Compose Plugin (already included with Docker)
+  debug:
+    msg: "Docker Compose is already installed via Docker plugin"
+  when: docker_compose_check.rc == 0
+

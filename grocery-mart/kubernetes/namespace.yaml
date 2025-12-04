@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grocery-mart
+  labels:
+    name: grocery-mart
+

@@ -1,0 +1,54 @@
+---
+- name: Create application directory
+  file:
+    path: /opt/grocery-mart
+    state: directory
+    mode: '0755'
+
+- name: Copy application files
+  copy:
+    src: "{{ item }}"
+    dest: /opt/grocery-mart/
+  loop:
+    - docker-compose.yml
+    - Dockerfile.frontend
+    - Dockerfile.backend
+    - nginx.conf
+  delegate_to: localhost
+  become: no
+
+- name: Copy frontend files
+  copy:
+    src: ../frontend/
+    dest: /opt/grocery-mart/frontend/
+    mode: '0755'
+
+- name: Copy backend files
+  copy:
+    src: ../backend/
+    dest: /opt/grocery-mart/backend/
+    mode: '0755'
+
+- name: Copy server.js
+  copy:
+    src: ../server.js
+    dest: /opt/grocery-mart/server.js
+    mode: '0644'
+
+- name: Copy package.json
+  copy:
+    src: ../package.json
+    dest: /opt/grocery-mart/package.json
+    mode: '0644'
+
+- name: Create .env file
+  template:
+    src: ../.env.example
+    dest: /opt/grocery-mart/.env
+    mode: '0644'
+
+- name: Start application with Docker Compose
+  docker_compose_v2:
+    project_src: /opt/grocery-mart
+    state: present
+
