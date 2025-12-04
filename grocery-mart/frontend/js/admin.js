@@ -77,7 +77,7 @@ function renderProductsTable() {
     tbody.innerHTML = allProducts.map(product => `
         <tr>
             <td><img src="${product.image}" alt="${product.name}" class="table-image" 
-                     onerror="this.src='https://via.placeholder.com/60x60?text=Product'"></td>
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Crect width=\'60\' height=\'60\' fill=\'%23e0e0e0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\' font-family=\'Arial\' font-size=\'10\'%3EProduct%3C/text%3E%3C/svg%3E'"></td>
             <td>${product.name}</td>
             <td>${product.category}</td>
             <td>₹${product.price}</td>

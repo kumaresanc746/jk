@@ -27,7 +27,7 @@ function renderProductDetail(product) {
             <div>
                 <img src="${product.image}" alt="${product.name}" 
                      style="width: 100%; border-radius: 10px;"
-                     onerror="this.src='https://via.placeholder.com/500x500?text=Product'">
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'500\' height=\'500\'%3E%3Crect width=\'500\' height=\'500\' fill=\'%23e0e0e0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\' font-family=\'Arial\' font-size=\'24\'%3EProduct%3C/text%3E%3C/svg%3E'">
             </div>
             <div>
                 <h1 style="font-size: 2rem; margin-bottom: 1rem;">${product.name}</h1>

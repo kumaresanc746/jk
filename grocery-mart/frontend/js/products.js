@@ -34,7 +34,7 @@ function renderProducts() {
     container.innerHTML = allProducts.map(product => `
         <div class="product-card" onclick="window.location.href='product-detail.html?id=${product._id}'">
             <img src="${product.image}" alt="${product.name}" class="product-image" 
-                 onerror="this.src='https://via.placeholder.com/300x300?text=Product'">
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Crect width=\'300\' height=\'300\' fill=\'%23e0e0e0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\' font-family=\'Arial\' font-size=\'16\'%3EProduct%3C/text%3E%3C/svg%3E'">
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
                 <div class="product-category">${product.category}</div>
